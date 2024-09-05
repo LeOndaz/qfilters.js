@@ -1,3 +1,5 @@
+import * as QFilters from './types';
+
 export class FilterBuilder {
     readonly separator: string = ' ';
 

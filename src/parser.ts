@@ -1,4 +1,5 @@
 import { BooleanFilter, DateFilter, FilterGroup, NumberFilter, StringFilter } from './filters';
+import * as QFilters from './types';
 
 export class Parser implements QFilters.Parser {
     parse(tokens: QFilters.Token[], separator: string = ' '): QFilters.FilterGroup {
@@ -64,7 +65,7 @@ export class Parser implements QFilters.Parser {
             case 'gte':
             case 'lt':
             case 'lte':
-                if (!(typeof filter.value === 'number') && !(filter.value instanceof Date)) {
+                if (typeof filter.value !== 'number' && !(filter.value instanceof Date)) {
                     throw new Error(`Operator ${filter.operator} can only be used with numbers or dates`);
                 }
                 break;

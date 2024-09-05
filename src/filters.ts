@@ -1,6 +1,6 @@
-import * as types from './types';
+import * as QFilters from './types';
 
-export class StringFilter implements types.Filter {
+export class StringFilter implements QFilters.Filter {
     constructor(
         public field: string,
         public operator: string,
@@ -12,9 +12,7 @@ export class StringFilter implements types.Filter {
     }
 }
 
-export class NumberFilter implements types.Filter {
-    readonly type: string = 'number';
-
+export class NumberFilter implements QFilters.Filter {
     constructor(
         public field: string,
         public operator: string,
@@ -26,7 +24,7 @@ export class NumberFilter implements types.Filter {
     }
 }
 
-export class BooleanFilter implements types.Filter {
+export class BooleanFilter implements QFilters.Filter {
     constructor(
         public field: string,
         public operator: string,
@@ -38,7 +36,7 @@ export class BooleanFilter implements types.Filter {
     }
 }
 
-export class DateFilter implements types.Filter {
+export class DateFilter implements QFilters.Filter {
     constructor(
         public field: string,
         public operator: string,
@@ -50,15 +48,15 @@ export class DateFilter implements types.Filter {
     }
 }
 
-export class FilterGroup implements types.FilterGroup {
+export class FilterGroup implements QFilters.FilterGroup {
     readonly name?: string;
-    readonly filters: (types.Filter | types.FilterGroup)[] = [];
+    readonly filters: (QFilters.Filter | QFilters.FilterGroup)[] = [];
     readonly separator: string = ' ';
     readonly isRoot: boolean = false;
 
-    logicalOperator: types.LogicalOperator;
+    logicalOperator: QFilters.LogicalOperator;
 
-    constructor({ name, logicalOperator = 'and', isRoot = false, separator = ' ' }: types.FilterGroupOptions = {}) {
+    constructor({ name, logicalOperator = 'and', isRoot = false, separator = ' ' }: QFilters.FilterGroupOptions = {}) {
         this.name = name;
         this.logicalOperator = logicalOperator;
         this.isRoot = isRoot;
@@ -72,22 +70,22 @@ export class FilterGroup implements types.FilterGroup {
         return this.filters.length > 1 && !this.isRoot ? `(${queryString})` : queryString;
     }
 
-    subgroup(operatorOrOpts: Omit<types.FilterGroupOptions, 'isRoot'> | types.LogicalOperator = {}): types.FilterGroup {
-        let subgroup: types.FilterGroup;
+    subgroup(
+        operatorOrOpts: Omit<QFilters.FilterGroupOptions, 'isRoot'> | QFilters.LogicalOperator = {},
+    ): QFilters.FilterGroup {
+        let subgroup: QFilters.FilterGroup;
 
         if (typeof operatorOrOpts === 'string') {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            subgroup = new (this.constructor as any)({ logicalOperator: operatorOrOpts });
+            subgroup = new FilterGroup({ logicalOperator: operatorOrOpts });
         } else {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            subgroup = new (this.constructor as any)(operatorOrOpts);
+            subgroup = new FilterGroup(operatorOrOpts);
         }
 
         this.filters.push(subgroup);
         return subgroup;
     }
 
-    addFilter(filter: types.Filter): void {
+    addFilter(filter: QFilters.Filter): void {
         this.filters.push(filter);
     }
 }

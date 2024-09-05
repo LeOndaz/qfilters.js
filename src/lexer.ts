@@ -1,3 +1,5 @@
+import * as QFilters from './types';
+
 export class Lexer implements QFilters.Lexer {
     private readonly GROUP_START = '(';
     private readonly GROUP_END = ')';

@@ -1,5 +1,6 @@
 import { expect, test, describe } from 'vitest';
 import { Lexer } from '../src/lexer';
+import * as QFilters from '../src/types';
 
 describe('Lexer', () => {
     const lexer = new Lexer();
