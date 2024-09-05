@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "ES2020",
+        "moduleResolution": "node",
+        "lib": ["ES2020"],
+        "typeRoots": ["./node_modules/@types", "."],
+        "types": [".", "vitest/globals"],
+
+        "rootDir": ".",
+        "outDir": "lib",
+
+        "strict": true,
+        "alwaysStrict": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "downlevelIteration": true,
+        "declaration": true,
+
+        "pretty": true
+    },
+    "include": ["./", "src/**/*", "global.d.ts"],
+    "exclude": ["node_modules", "lib"]
+}
