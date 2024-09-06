@@ -2,7 +2,7 @@
     "name": "qfilters",
     "version": "1.0.0",
     "description": "Handle filters with ease in query params",
-    "main": "./index.js",
+    "main": "./index.ts",
     "type": "module",
     "author": {
         "name": "LeOndaz",
