@@ -1,7 +1,7 @@
-import { Lexer } from './lib/src';
-import { Parser } from './lib/src';
-import { FilterGroup, StringFilter, NumberFilter, BooleanFilter, DateFilter } from './lib/src';
-import { parseQuery, deserializeQuery } from './lib/src';
+import { Lexer } from './lib';
+import { Parser } from './lib';
+import { FilterGroup, StringFilter, NumberFilter, BooleanFilter, DateFilter } from './lib';
+import { parseQuery, deserializeQuery } from './lib';
 
 export {
     Lexer,
@@ -17,7 +17,9 @@ export {
 
 export as namespace qfilters;
 
-export declare const qfilters: {
+declare const qfilters: {
     parseQuery: typeof parseQuery;
     deserializeQuery: typeof deserializeQuery;
 };
+
+export default qfilters;
