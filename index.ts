@@ -1,9 +1,7 @@
-import { Lexer } from './src/lexer';
-import { Parser } from './src/parser';
-import { FilterGroup, StringFilter, NumberFilter, BooleanFilter, DateFilter } from './src/filters';
-import { parseQuery, deserializeQuery } from './src/utils';
-
-export * from './src/types';
+import { Lexer } from './lib';
+import { Parser } from './lib';
+import { FilterGroup, StringFilter, NumberFilter, BooleanFilter, DateFilter } from './lib';
+import { parseQuery, deserializeQuery } from './lib';
 
 export {
     Lexer,
