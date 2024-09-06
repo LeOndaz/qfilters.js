@@ -11,19 +11,22 @@ export class Parser implements qfilters.Parser {
 
         for (const token of tokens) {
             switch (token.type) {
-                case qfilters.TokenType.GroupStart:
+                case qfilters.TokenType.GroupStart: {
                     groupStack.push(new FilterGroup({ separator }));
                     break;
-                case qfilters.TokenType.GroupEnd:
+                }
+                case qfilters.TokenType.GroupEnd: {
                     const completedGroup = groupStack.pop();
                     if (completedGroup && groupStack.length > 0) {
                         groupStack[groupStack.length - 1].filters.push(completedGroup);
                     }
                     break;
-                case qfilters.TokenType.LogicalOperator:
+                }
+                case qfilters.TokenType.LogicalOperator: {
                     groupStack[groupStack.length - 1].logicalOperator = token.value as qfilters.LogicalOperator;
                     break;
-                case qfilters.TokenType.Filter:
+                }
+                case qfilters.TokenType.Filter: {
                     // narrow-down the type, if you see this and you have a better solution
                     // please let me know
                     const t = token as qfilters.FilterToken;
@@ -31,8 +34,10 @@ export class Parser implements qfilters.Parser {
                     this.validateFilter(filter);
                     groupStack[groupStack.length - 1].filters.push(filter);
                     break;
-                default:
+                }
+                default: {
                     throw new Error(`Unknown token type: ${JSON.stringify(token, null, 2)}`);
+                }
             }
         }
 
