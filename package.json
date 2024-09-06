@@ -11,8 +11,7 @@
     "contributors": [],
     "license": "MIT",
     "files": [
-        "./src",
-        "index.ts",
+        "lib",
         "index.d.ts"
     ],
     "typings": "./index.d.ts",
