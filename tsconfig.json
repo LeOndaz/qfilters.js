@@ -4,8 +4,8 @@
         "module": "ES2020",
         "moduleResolution": "node",
         "lib": ["ES2020"],
-        "typeRoots": ["./src"],
-        "types": ["./src", "vitest/globals"],
+        "typeRoots": [],
+        "types": [],
 
         "rootDir": ".",
         "outDir": "lib",
