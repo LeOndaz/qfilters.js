@@ -1,6 +1,6 @@
-import * as QFilters from './types';
+import * as qfilters from './types';
 
-export class Lexer implements QFilters.Lexer {
+export class Lexer implements qfilters.Lexer {
     private readonly GROUP_START = '(';
     private readonly GROUP_END = ')';
     private readonly FILTER_SEPARATOR = ':';
@@ -8,7 +8,7 @@ export class Lexer implements QFilters.Lexer {
     private input: string = '';
     private position: number = 0;
 
-    lex(query: string | Record<string, string>): QFilters.Token[] {
+    lex(query: string | Record<string, string>): qfilters.Token[] {
         if (typeof query === 'string') {
             this.input = query;
             this.position = 0;
@@ -22,8 +22,8 @@ export class Lexer implements QFilters.Lexer {
         return this.input[this.position + offset] || '';
     }
 
-    private lexString(): QFilters.Token[] {
-        const tokens: QFilters.Token[] = [];
+    private lexString(): qfilters.Token[] {
+        const tokens: qfilters.Token[] = [];
 
         while (this.position < this.input.length) {
             if (this.peek() === this.GROUP_START) {
@@ -40,16 +40,16 @@ export class Lexer implements QFilters.Lexer {
         return tokens;
     }
 
-    private onGroupStart(): QFilters.Token {
+    private onGroupStart(): qfilters.Token {
         this.position++;
         return {
-            type: QFilters.TokenType.GroupStart,
+            type: qfilters.TokenType.GroupStart,
         };
     }
 
-    private onGroupEnd(): QFilters.Token {
+    private onGroupEnd(): qfilters.Token {
         this.position++;
-        return { type: QFilters.TokenType.GroupEnd };
+        return { type: qfilters.TokenType.GroupEnd };
     }
 
     private onWhitespace(): void {
@@ -58,7 +58,7 @@ export class Lexer implements QFilters.Lexer {
         }
     }
 
-    private onWord(): QFilters.Token {
+    private onWord(): qfilters.Token {
         const word = this.readWord();
 
         if (this.isSupportedOperator(word)) {
@@ -95,23 +95,23 @@ export class Lexer implements QFilters.Lexer {
         return this.OPERATORS.includes(word.toLowerCase());
     }
 
-    private onSupportedOperator(word: string): QFilters.LogicalOperatorToken {
-        return { type: QFilters.TokenType.LogicalOperator, value: word.toLowerCase() as QFilters.LogicalOperator };
+    private onSupportedOperator(word: string): qfilters.LogicalOperatorToken {
+        return { type: qfilters.TokenType.LogicalOperator, value: word.toLowerCase() as qfilters.LogicalOperator };
     }
 
-    private onFilter(word: string): QFilters.Token {
+    private onFilter(word: string): qfilters.Token {
         const [field, operator, ...valueParts] = word.split(this.FILTER_SEPARATOR);
         const value = valueParts.join(this.FILTER_SEPARATOR);
 
         return {
-            type: QFilters.TokenType.Filter,
+            type: qfilters.TokenType.Filter,
             field,
             operator,
             value,
         };
     }
 
-    private lexObject(query: Record<string | 'filter', string>): QFilters.Token[] {
+    private lexObject(query: Record<string | 'filter', string>): qfilters.Token[] {
         return Object.entries(query).flatMap(([key, value]) => {
             if (key === 'filter') {
                 this.input = value;
@@ -122,7 +122,7 @@ export class Lexer implements QFilters.Lexer {
             const [field, operator] = key.split(this.FILTER_SEPARATOR);
             return [
                 {
-                    type: QFilters.TokenType.Filter,
+                    type: qfilters.TokenType.Filter,
                     field,
                     operator,
                     value: this.removeQuotes(value),

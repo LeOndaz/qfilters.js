@@ -1,6 +1,6 @@
 import { expect, test, describe } from 'vitest';
 import { Lexer } from '../src/lexer';
-import * as QFilters from '../src/types';
+import * as qfilters from '../src/types';
 
 describe('Lexer', () => {
     const lexer = new Lexer();
@@ -10,13 +10,13 @@ describe('Lexer', () => {
         const tokens = lexer.lex(input);
 
         expect(tokens).toEqual([
-            { type: QFilters.TokenType.Filter, field: 'name', operator: 'eq', value: 'John' },
-            { type: QFilters.TokenType.LogicalOperator, value: 'and' },
-            { type: QFilters.TokenType.GroupStart },
-            { type: QFilters.TokenType.Filter, field: 'age', operator: 'gt', value: '30' },
-            { type: QFilters.TokenType.LogicalOperator, value: 'or' },
-            { type: QFilters.TokenType.Filter, field: 'city', operator: 'eq', value: 'New York' },
-            { type: QFilters.TokenType.GroupEnd },
+            { type: qfilters.TokenType.Filter, field: 'name', operator: 'eq', value: 'John' },
+            { type: qfilters.TokenType.LogicalOperator, value: 'and' },
+            { type: qfilters.TokenType.GroupStart },
+            { type: qfilters.TokenType.Filter, field: 'age', operator: 'gt', value: '30' },
+            { type: qfilters.TokenType.LogicalOperator, value: 'or' },
+            { type: qfilters.TokenType.Filter, field: 'city', operator: 'eq', value: 'New York' },
+            { type: qfilters.TokenType.GroupEnd },
         ]);
     });
 
@@ -34,10 +34,10 @@ describe('Lexer', () => {
         const tokens = lexer.lex(input);
 
         expect(tokens).toEqual([
-            { type: QFilters.TokenType.Filter, field: 'name', operator: 'eq', value: 'John' },
-            { type: QFilters.TokenType.Filter, field: 'age', operator: 'gt', value: '30' },
-            { type: QFilters.TokenType.LogicalOperator, value: 'or' },
-            { type: QFilters.TokenType.Filter, field: 'city', operator: 'eq', value: 'New York' },
+            { type: qfilters.TokenType.Filter, field: 'name', operator: 'eq', value: 'John' },
+            { type: qfilters.TokenType.Filter, field: 'age', operator: 'gt', value: '30' },
+            { type: qfilters.TokenType.LogicalOperator, value: 'or' },
+            { type: qfilters.TokenType.Filter, field: 'city', operator: 'eq', value: 'New York' },
         ]);
     });
 });

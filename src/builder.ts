@@ -1,15 +1,15 @@
-import * as QFilters from './types';
+import * as qfilters from './types';
 
 export class FilterBuilder {
     readonly separator: string = ' ';
 
-    readonly grouperClass: new (options: QFilters.FilterGroupOptions) => QFilters.FilterGroup;
-    readonly root: QFilters.FilterGroup;
-    readonly stack: QFilters.FilterGroup[] = [];
+    readonly grouperClass: new (options: qfilters.FilterGroupOptions) => qfilters.FilterGroup;
+    readonly root: qfilters.FilterGroup;
+    readonly stack: qfilters.FilterGroup[] = [];
 
     constructor(
-        grouperClass: new (options: QFilters.FilterSubgroupOptions) => QFilters.FilterGroup,
-        opts: QFilters.FilterGroupOptions = {},
+        grouperClass: new (options: qfilters.FilterSubgroupOptions) => qfilters.FilterGroup,
+        opts: qfilters.FilterGroupOptions = {},
     ) {
         this.root = new grouperClass({
             isRoot: true,
@@ -19,21 +19,21 @@ export class FilterBuilder {
         this.stack.push(this.root);
     }
 
-    private get currentGroup(): QFilters.FilterGroup {
+    private get currentGroup(): qfilters.FilterGroup {
         return this.stack[this.stack.length - 1];
     }
 
-    addFilter(filter: QFilters.Filter): FilterBuilder {
+    addFilter(filter: qfilters.Filter): FilterBuilder {
         this.currentGroup.filters.push(filter);
         return this;
     }
 
-    group(opts: QFilters.FilterSubgroupOptions | QFilters.LogicalOperator): FilterBuilder {
+    group(opts: qfilters.FilterSubgroupOptions | qfilters.LogicalOperator): FilterBuilder {
         if (typeof opts === 'string') {
             opts = { logicalOperator: opts };
         }
 
-        const newGroup: QFilters.FilterGroup = new this.grouperClass(opts);
+        const newGroup: qfilters.FilterGroup = new this.grouperClass(opts);
         this.stack.push(newGroup);
         return this;
     }

@@ -1,32 +1,32 @@
 import { BooleanFilter, DateFilter, FilterGroup, NumberFilter, StringFilter } from './filters';
-import * as QFilters from './types';
+import * as qfilters from './types';
 
-export class Parser implements QFilters.Parser {
-    parse(tokens: QFilters.Token[], separator: string = ' '): QFilters.FilterGroup {
+export class Parser implements qfilters.Parser {
+    parse(tokens: qfilters.Token[], separator: string = ' '): qfilters.FilterGroup {
         const rootGroup = new FilterGroup({
             isRoot: true,
             separator,
         });
-        const groupStack: QFilters.FilterGroup[] = [rootGroup];
+        const groupStack: qfilters.FilterGroup[] = [rootGroup];
 
         for (const token of tokens) {
             switch (token.type) {
-                case QFilters.TokenType.GroupStart:
+                case qfilters.TokenType.GroupStart:
                     groupStack.push(new FilterGroup({ separator }));
                     break;
-                case QFilters.TokenType.GroupEnd:
+                case qfilters.TokenType.GroupEnd:
                     const completedGroup = groupStack.pop();
                     if (completedGroup && groupStack.length > 0) {
                         groupStack[groupStack.length - 1].filters.push(completedGroup);
                     }
                     break;
-                case QFilters.TokenType.LogicalOperator:
-                    groupStack[groupStack.length - 1].logicalOperator = token.value as QFilters.LogicalOperator;
+                case qfilters.TokenType.LogicalOperator:
+                    groupStack[groupStack.length - 1].logicalOperator = token.value as qfilters.LogicalOperator;
                     break;
-                case QFilters.TokenType.Filter:
+                case qfilters.TokenType.Filter:
                     // narrow-down the type, if you see this and you have a better solution
                     // please let me know
-                    const t = token as QFilters.FilterToken;
+                    const t = token as qfilters.FilterToken;
                     const filter = this.createFilter(t.field, t.operator, t.value);
                     this.validateFilter(filter);
                     groupStack[groupStack.length - 1].filters.push(filter);
@@ -39,7 +39,7 @@ export class Parser implements QFilters.Parser {
         return rootGroup;
     }
 
-    private createFilter(field: string, operator: string, value: string): QFilters.Filter {
+    private createFilter(field: string, operator: string, value: string): qfilters.Filter {
         if (value === 'true' || value === 'false') {
             return new BooleanFilter(field, operator, value === 'true');
         }
@@ -55,7 +55,7 @@ export class Parser implements QFilters.Parser {
         return new StringFilter(field, operator, value);
     }
 
-    private validateFilter(filter: QFilters.Filter): void {
+    private validateFilter(filter: qfilters.Filter): void {
         switch (filter.operator) {
             case 'eq':
             case 'ne':

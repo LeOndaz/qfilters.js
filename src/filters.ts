@@ -1,6 +1,6 @@
-import * as QFilters from './types';
+import * as qfilters from './types';
 
-export class StringFilter implements QFilters.Filter {
+export class StringFilter implements qfilters.Filter {
     constructor(
         public field: string,
         public operator: string,
@@ -12,7 +12,7 @@ export class StringFilter implements QFilters.Filter {
     }
 }
 
-export class NumberFilter implements QFilters.Filter {
+export class NumberFilter implements qfilters.Filter {
     constructor(
         public field: string,
         public operator: string,
@@ -24,7 +24,7 @@ export class NumberFilter implements QFilters.Filter {
     }
 }
 
-export class BooleanFilter implements QFilters.Filter {
+export class BooleanFilter implements qfilters.Filter {
     constructor(
         public field: string,
         public operator: string,
@@ -36,7 +36,7 @@ export class BooleanFilter implements QFilters.Filter {
     }
 }
 
-export class DateFilter implements QFilters.Filter {
+export class DateFilter implements qfilters.Filter {
     constructor(
         public field: string,
         public operator: string,
@@ -48,15 +48,15 @@ export class DateFilter implements QFilters.Filter {
     }
 }
 
-export class FilterGroup implements QFilters.FilterGroup {
+export class FilterGroup implements qfilters.FilterGroup {
     readonly name?: string;
-    readonly filters: (QFilters.Filter | QFilters.FilterGroup)[] = [];
+    readonly filters: (qfilters.Filter | qfilters.FilterGroup)[] = [];
     readonly separator: string = ' ';
     readonly isRoot: boolean = false;
 
-    logicalOperator: QFilters.LogicalOperator;
+    logicalOperator: qfilters.LogicalOperator;
 
-    constructor({ name, logicalOperator = 'and', isRoot = false, separator = ' ' }: QFilters.FilterGroupOptions = {}) {
+    constructor({ name, logicalOperator = 'and', isRoot = false, separator = ' ' }: qfilters.FilterGroupOptions = {}) {
         this.name = name;
         this.logicalOperator = logicalOperator;
         this.isRoot = isRoot;
@@ -71,9 +71,9 @@ export class FilterGroup implements QFilters.FilterGroup {
     }
 
     subgroup(
-        operatorOrOpts: Omit<QFilters.FilterGroupOptions, 'isRoot'> | QFilters.LogicalOperator = {},
-    ): QFilters.FilterGroup {
-        let subgroup: QFilters.FilterGroup;
+        operatorOrOpts: Omit<qfilters.FilterGroupOptions, 'isRoot'> | qfilters.LogicalOperator = {},
+    ): qfilters.FilterGroup {
+        let subgroup: qfilters.FilterGroup;
 
         if (typeof operatorOrOpts === 'string') {
             subgroup = new FilterGroup({ logicalOperator: operatorOrOpts });
@@ -85,7 +85,7 @@ export class FilterGroup implements QFilters.FilterGroup {
         return subgroup;
     }
 
-    addFilter(filter: QFilters.Filter): void {
+    addFilter(filter: qfilters.Filter): void {
         this.filters.push(filter);
     }
 }
