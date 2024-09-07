@@ -4,9 +4,11 @@
         "lib": ["ES2020"],
         "module": "ES2020",
         "moduleResolution": "node",
-
+        "paths": {},
         "rootDir": "src",
         "outDir": "lib",
+        
+        "esModuleInterop": true,
 
         "strict": true,
         "alwaysStrict": true,
@@ -22,8 +24,6 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
 
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
         "downlevelIteration": true,
         "declaration": true,
 

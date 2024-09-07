@@ -120,14 +120,12 @@ export class Lexer implements qfilters.Lexer {
             }
 
             const [field, operator] = key.split(this.FILTER_SEPARATOR);
-            return [
-                {
-                    type: qfilters.TokenType.Filter,
-                    field,
-                    operator,
-                    value: this.removeQuotes(value),
-                },
-            ];
+            return [{
+                type: qfilters.TokenType.Filter,
+                field,
+                operator,
+                value: this.removeQuotes(value),
+            }];
         });
     }
 
