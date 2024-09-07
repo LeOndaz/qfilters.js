@@ -2,7 +2,7 @@
     "name": "qfilters",
     "version": "1.0.0",
     "description": "Handle filters with ease in query params",
-    "main": "./index.ts",
+    "main": "./lib/index.js",
     "type": "module",
     "author": {
         "name": "LeOndaz",
@@ -11,13 +11,12 @@
     "contributors": [],
     "license": "MIT",
     "files": [
-        "./src",
-        "index.ts",
+        "lib",
         "index.d.ts"
     ],
     "typings": "./index.d.ts",
     "scripts": {
-        "build": "tsc",
+        "build": "tsc && resolve-tspaths",
         "lint": "eslint .",
         "prepublish": "npm run build",
         "test": "vitest",
@@ -33,6 +32,7 @@
         "eslint": "^9.9.1",
         "husky": "^9.1.5",
         "prettier": "^3.3.3",
+        "resolve-tspaths": "^0.8.19",
         "typescript": "^5.5.4",
         "typescript-eslint": "^8.4.0",
         "vitest": "^2.0.5"

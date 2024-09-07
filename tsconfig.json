@@ -2,11 +2,13 @@
     "extends": "@tsconfig/node16/tsconfig.json",
     "compilerOptions": {
         "lib": ["ES2020"],
-        "module": "CommonJS",
+        "module": "ES2020",
         "moduleResolution": "node",
-
-        "rootDir": ".",
+        "paths": {},
+        "rootDir": "src",
         "outDir": "lib",
+        
+        "esModuleInterop": true,
 
         "strict": true,
         "alwaysStrict": true,
@@ -22,13 +24,11 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
 
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
         "downlevelIteration": true,
         "declaration": true,
 
         "pretty": true
     },
-    "include": ["./*.ts", "src/**/*"],
+    "include": ["src/**/*"],
     "exclude": ["node_modules", "lib"]
 }

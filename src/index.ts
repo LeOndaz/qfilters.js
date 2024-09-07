@@ -1,6 +1,11 @@
+import { parseQuery, deserializeQuery } from './utils';
+
 export { Lexer } from './lexer';
 export { Parser } from './parser';
 export { FilterGroup, StringFilter, NumberFilter, BooleanFilter, DateFilter } from './filters';
-export { parseQuery } from './utils';
+export { parseQuery, deserializeQuery } from './utils';
 
-export * from './types';
+export default {
+    parseQuery,
+    deserializeQuery,
+};
