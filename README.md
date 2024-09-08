@@ -4,7 +4,7 @@ Handle filters with ease in query params. qfilters handles parsing params to obj
 
 The docs is not yet finished, but you can check the tests for now.
 Extending the interface will be available once this reaches a stable version.
-For now, all the interface is private till decided on a stable interface.
+For this specific reason, the interface extension is blocked and each method is private.
 
 ## Installation
 
