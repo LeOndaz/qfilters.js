@@ -8,27 +8,7 @@ For this specific reason, the interface extension is blocked and each method is 
 
 ## Installation
 
-```bash
-npm install qfilters
-```
-
-or
-
-```bash
-yarn add qfilters
-```
-
-or
-
-```bash
-pnpm add qfilters
-```
-
-or
-
-```bash
-bun add qfilters
-```
+You'll need to install the package with git, since it's not published yet.
 
 ## Usage
 
