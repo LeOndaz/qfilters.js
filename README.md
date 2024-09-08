@@ -1,6 +1,10 @@
 # qfilters
 
-Handle filters with ease in query params.
+Handle filters with ease in query params. qfilters handles parsing params to objects you can work with.
+
+The docs is not yet finished, but you can check the tests for now.
+Extending the interface will be available once this reaches a stable version.
+For now, all the interface is private till decided on a stable interface.
 
 ## Installation
 
@@ -31,10 +35,14 @@ bun add qfilters
 ```typescript
 import { parseQuery, deserializeQuery } from 'qfilters';
 
-const query = 'name:eq:John&age:gte:20&isActive:eq:true';
+const query = 'name:eq:John';
 const parsedQuery = parseQuery(query);
 const serializedQuery = deserializeQuery(parsedQuery);
-```
 
-Extending the interface will be available once this reaches a stable version.
-For now, all the interface is private.
+console.log(parsedQuery);
+// {
+//   field: 'name',
+//   operator: 'eq',
+//   value: 'John',
+// }
+```
