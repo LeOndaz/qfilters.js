@@ -1,11 +1,9 @@
 import * as qfilters from './types';
 
 export class FilterBuilder {
-    readonly separator: string = ' ';
-
     readonly grouperClass: new (options: qfilters.FilterGroupOptions) => qfilters.FilterGroup;
-    readonly root: qfilters.FilterGroup;
-    readonly stack: qfilters.FilterGroup[] = [];
+    root: qfilters.FilterGroup;
+    activeGroup: qfilters.FilterGroup;
 
     constructor(
         grouperClass: new (options: qfilters.FilterSubgroupOptions) => qfilters.FilterGroup,
@@ -16,37 +14,35 @@ export class FilterBuilder {
             ...opts,
         });
         this.grouperClass = grouperClass;
-        this.stack.push(this.root);
-    }
-
-    private get currentGroup(): qfilters.FilterGroup {
-        return this.stack[this.stack.length - 1];
+        this.activeGroup = this.root;
     }
 
     addFilter(filter: qfilters.Filter): FilterBuilder {
-        this.currentGroup.filters.push(filter);
+        this.activeGroup.addFilter(filter);
         return this;
     }
 
-    group(opts: qfilters.FilterSubgroupOptions | qfilters.LogicalOperator): FilterBuilder {
+    group(opts: qfilters.FilterSubgroupOptions | qfilters.FilterGroupOperator): FilterBuilder {
         if (typeof opts === 'string') {
-            opts = { logicalOperator: opts };
+            opts = { operator: opts };
         }
 
         const newGroup: qfilters.FilterGroup = new this.grouperClass(opts);
-        this.stack.push(newGroup);
+        this.activeGroup.addFilter(newGroup);
+        this.activeGroup = newGroup;
         return this;
     }
 
     endGroup(): FilterBuilder {
-        if (this.stack.length > 1) {
-            const completedGroup = this.stack.pop()!;
-            this.currentGroup.filters.push(completedGroup);
-        }
+        this.activeGroup = this.root;
         return this;
     }
 
     build(): string {
         return this.root.toString();
+    }
+
+    toString(): string {
+        return this.build();
     }
 }

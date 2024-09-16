@@ -1,43 +1,33 @@
-import { expect, test, describe } from 'vitest';
+import { expect, describe } from 'vitest';
 import { Lexer } from '../src/lexer';
-import * as qfilters from '../src/types';
+import { test } from './fixtures';
 
 describe('Lexer', () => {
     const lexer = new Lexer();
 
     test('lexes string input', () => {
-        const input = 'name:eq:John and (age:gt:30 or city:eq:"New York")';
-        const tokens = lexer.lex(input);
+        const input = 'name:eq:John&(age:gt:30|city:eq:"New York")';
+        const tokens = lexer.tokenize(input);
 
         expect(tokens).toEqual([
-            { type: qfilters.TokenType.Filter, field: 'name', operator: 'eq', value: 'John' },
-            { type: qfilters.TokenType.LogicalOperator, value: 'and' },
-            { type: qfilters.TokenType.GroupStart },
-            { type: qfilters.TokenType.Filter, field: 'age', operator: 'gt', value: '30' },
-            { type: qfilters.TokenType.LogicalOperator, value: 'or' },
-            { type: qfilters.TokenType.Filter, field: 'city', operator: 'eq', value: 'New York' },
-            { type: qfilters.TokenType.GroupEnd },
+            { type: 'filter-operation', field: 'name', operation: 'eq', value: 'John' },
+            { type: 'group-operator', operator: '&' },
+            { type: 'group-start' },
+            { type: 'filter-operation', field: 'age', operation: 'gt', value: '30' },
+            { type: 'group-operator', operator: '|' },
+            { type: 'filter-operation', field: 'city', operation: 'eq', value: 'New York' },
+            { type: 'group-end' },
         ]);
     });
 
-    test('lexes string input without quotes', () => {
+    test("lexes string input without quotes shouldn't throw", () => {
         // Incorrect synyax, notice (New York) has spacing
-        const input = 'name:eq:John and (age:gt:30 or city:eq:New York)';
-        expect(() => lexer.lex(input)).not.toThrow();
+        const input = 'name:eq:John&(age:gt:30|city:eq:New York)';
+        expect(() => lexer.tokenize(input)).not.toThrow();
     });
 
-    test('lex objects', () => {
-        const input = {
-            'name:eq': 'John',
-            filter: 'age:gt:30 or city:eq:"New York"',
-        };
-        const tokens = lexer.lex(input);
-
-        expect(tokens).toEqual([
-            { type: qfilters.TokenType.Filter, field: 'name', operator: 'eq', value: 'John' },
-            { type: qfilters.TokenType.Filter, field: 'age', operator: 'gt', value: '30' },
-            { type: qfilters.TokenType.LogicalOperator, value: 'or' },
-            { type: qfilters.TokenType.Filter, field: 'city', operator: 'eq', value: 'New York' },
-        ]);
+    test('Lexer returns correct tokens', ({ rootGroup, rootGroupTokens }) => {
+        const tokens = lexer.tokenize(rootGroup.toString());
+        expect(tokens).toEqual(rootGroupTokens);
     });
 });

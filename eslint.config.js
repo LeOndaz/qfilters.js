@@ -15,4 +15,9 @@ export default tseslint.config(
     {
         ignores: ['**/lib/**'],
     },
+    {
+        rules: {
+            'no-console': 'error',
+        },
+    },
 );

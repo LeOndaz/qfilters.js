@@ -7,7 +7,7 @@
         "paths": {},
         "rootDir": "src",
         "outDir": "lib",
-        
+
         "esModuleInterop": true,
 
         "strict": true,
