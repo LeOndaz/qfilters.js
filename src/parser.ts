@@ -1,49 +1,54 @@
 import { BooleanFilter, DateFilter, FilterGroup, NumberFilter, StringFilter } from './filters';
 import * as qfilters from './types';
+import { isFilterToken, isGroupOperatorToken } from './utils';
 
 export class Parser implements qfilters.Parser {
     parse(tokens: qfilters.Token[]): qfilters.FilterGroup {
-        const rootGroup = new FilterGroup({
-            isRoot: true,
-        });
-        const groupStack: qfilters.FilterGroup[] = [rootGroup];
+        const rootGroup = new FilterGroup({ isRoot:true})
+        const groupStack: FilterGroup[] = [rootGroup];
 
-        for (const token of tokens) {
-            switch (token.type) {
-                case 'group-start': {
-                    groupStack.push(new FilterGroup());
-                    break;
+        for (let i = 0; i < tokens.length; i++) {
+            const token = tokens[i];
+
+            if (token.type === 'group-start') {
+                if (i !== 0) {
+                    const newGroup = new FilterGroup();
+                    groupStack[groupStack.length - 1].addFilter(newGroup);
+                    groupStack.push(newGroup)
+                    continue;
                 }
-                case 'group-end': {
-                    const completedGroup = groupStack.pop();
-                    if (completedGroup && groupStack.length > 0) {
-                        groupStack[groupStack.length - 1].filters.push(completedGroup);
-                    }
-                    break;
-                }
-                case 'group-operator': {
-                    groupStack[groupStack.length - 1].operator = token.operator as qfilters.FilterGroupOperator;
-                    break;
-                }
-                case 'filter-operation': {
-                    // narrow-down the type, if you see this and you have a better solution
-                    // please let me know as I don't like using `as`
-                    const t = token as qfilters.FilterToken;
-                    const filter = this.createFilter(t.field, t.operation, t.value);
-                    this.validateFilter(filter);
-                    groupStack[groupStack.length - 1].addFilter(filter);
-                    break;
-                }
-                default: {
-                    throw new Error(`Unknown token type: ${JSON.stringify(token, null, 2)}`);
-                }
+                groupStack.push(rootGroup);
+                continue;
             }
+
+            if (token.type === 'group-end') {
+                groupStack.pop();
+                continue;
+            }
+
+            if (isGroupOperatorToken(token)) {
+                groupStack[groupStack.length - 1].operator = token.operator;
+                continue;
+            }
+
+            if (isFilterToken(token)) {
+                const filter = this.createFilter(token.field, token.operation, token.value);
+                this.validateFilter(filter);
+                groupStack[groupStack.length - 1].addFilter(filter);
+                continue;
+            }
+
+            throw new Error(`Unknown token type: ${JSON.stringify(token, null, 2)}`);
         }
 
-        return rootGroup;
+        if (groupStack.length !== 1) {
+            throw new Error('Mismatched group parentheses');
+        }
+
+        return groupStack[0];
     }
 
-    private createFilter(field: string, operator: string, value: string): qfilters.Filter {
+    protected createFilter(field: string, operator: string, value: string): qfilters.Filter {
         if (value === 'true' || value === 'false') {
             return new BooleanFilter(field, operator, value === 'true');
         }
@@ -75,10 +80,6 @@ export class Parser implements qfilters.Parser {
                 break;
             default:
                 throw new Error(`Unknown operator: ${filter.operation}`);
-        }
-
-        if (typeof filter.value === 'string' && !filter.value.startsWith('"') && !filter.value.endsWith('"')) {
-            throw new Error(`eq operator with string value requires quotes: ${filter.field}:eq:${filter.value}`);
         }
     }
 }
